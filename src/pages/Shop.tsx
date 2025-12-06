@@ -19,16 +19,16 @@ interface Product {
 }
 
 const allProducts: Product[] = [
-  { id: "1", name: "Royal Blue Classic", price: 45, image: hoodieBlue, color: "Royal Blue", sizes: ["S", "M", "L", "XL"] },
-  { id: "2", name: "Desert Sand", price: 45, image: hoodieBeige, color: "Beige", sizes: ["S", "M", "L", "XL"] },
-  { id: "3", name: "Autumn Brown", price: 45, image: hoodieBrown, color: "Brown", sizes: ["S", "M", "L", "XL"] },
-  { id: "4", name: "Midnight Black", price: 45, image: heroHoodie, color: "Black", sizes: ["S", "M", "L", "XL", "XXL"] },
+  { id: "1", name: "Ocean Wave", price: 15, image: hoodieBlue, color: "Navy", sizes: ["S", "M", "L", "XL"] },
+  { id: "2", name: "Desert Sand", price: 15, image: hoodieBeige, color: "Cream", sizes: ["S", "M", "L", "XL"] },
+  { id: "3", name: "Autumn Rust", price: 15, image: hoodieBrown, color: "Rust", sizes: ["S", "M", "L", "XL"] },
+  { id: "4", name: "Midnight Shadow", price: 15, image: heroHoodie, color: "Charcoal", sizes: ["S", "M", "L", "XL", "XXL"] },
 ];
 
 const Shop = () => {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
 
-  const colors = ["Royal Blue", "Beige", "Brown", "Black"];
+  const colors = ["Navy", "Cream", "Rust", "Charcoal"];
   
   const filteredProducts = selectedColor 
     ? allProducts.filter(p => p.color === selectedColor)

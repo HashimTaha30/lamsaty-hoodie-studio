@@ -20,8 +20,8 @@ interface CartItem {
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([
-    { id: "1", name: "Royal Blue Classic", price: 45, image: hoodieBlue, quantity: 1, size: "M" },
-    { id: "2", name: "Desert Sand", price: 45, image: hoodieBeige, quantity: 2, size: "L" },
+    { id: "1", name: "Ocean Wave", price: 15, image: hoodieBlue, quantity: 1, size: "M" },
+    { id: "2", name: "Desert Sand", price: 15, image: hoodieBeige, quantity: 2, size: "L" },
   ]);
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
