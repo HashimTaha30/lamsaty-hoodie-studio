@@ -16,24 +16,24 @@ interface Product {
 const featuredProducts: Product[] = [
   {
     id: "1",
-    name: "Royal Blue Classic",
-    price: 45,
+    name: "Ocean Wave",
+    price: 15,
     image: hoodieBlue,
-    color: "Royal Blue",
+    color: "Navy",
   },
   {
     id: "2",
     name: "Desert Sand",
-    price: 45,
+    price: 15,
     image: hoodieBeige,
-    color: "Beige",
+    color: "Cream",
   },
   {
     id: "3",
-    name: "Autumn Brown",
-    price: 45,
+    name: "Autumn Rust",
+    price: 15,
     image: hoodieBrown,
-    color: "Brown",
+    color: "Rust",
   },
 ];
 

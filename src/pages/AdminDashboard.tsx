@@ -11,7 +11,9 @@ import {
   Search,
   Check,
   Clock,
-  Truck
+  Truck,
+  Upload,
+  Image as ImageIcon
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -32,19 +34,20 @@ interface Product {
   price: number;
   color: string;
   stock: number;
+  image?: string;
 }
 
 const mockOrders: Order[] = [
-  { id: "ORD001", customerName: "Ahmad Ali", phone: "0790123456", product: "Royal Blue Classic", quantity: 2, total: 90, status: "pending", date: "2024-01-15" },
-  { id: "ORD002", customerName: "Sara Hassan", phone: "0791234567", product: "Desert Sand", quantity: 1, total: 45, status: "processing", date: "2024-01-14" },
-  { id: "ORD003", customerName: "Omar Khalid", phone: "0792345678", product: "Custom Design", quantity: 1, total: 55, status: "shipped", date: "2024-01-13" },
+  { id: "ORD001", customerName: "Ahmad Ali", phone: "0790123456", product: "Ocean Wave", quantity: 2, total: 30, status: "pending", date: "2024-01-15" },
+  { id: "ORD002", customerName: "Sara Hassan", phone: "0791234567", product: "Desert Sand", quantity: 1, total: 15, status: "processing", date: "2024-01-14" },
+  { id: "ORD003", customerName: "Omar Khalid", phone: "0792345678", product: "Custom Design", quantity: 1, total: 25, status: "shipped", date: "2024-01-13" },
 ];
 
 const mockProducts: Product[] = [
-  { id: "1", name: "Royal Blue Classic", price: 45, color: "Royal Blue", stock: 25 },
-  { id: "2", name: "Desert Sand", price: 45, color: "Beige", stock: 18 },
-  { id: "3", name: "Autumn Brown", price: 45, color: "Brown", stock: 30 },
-  { id: "4", name: "Midnight Black", price: 45, color: "Black", stock: 42 },
+  { id: "1", name: "Ocean Wave", price: 15, color: "Navy", stock: 25 },
+  { id: "2", name: "Desert Sand", price: 15, color: "Cream", stock: 18 },
+  { id: "3", name: "Autumn Rust", price: 15, color: "Rust", stock: 30 },
+  { id: "4", name: "Midnight Shadow", price: 15, color: "Charcoal", stock: 42 },
 ];
 
 const AdminDashboard = () => {
@@ -53,8 +56,22 @@ const AdminDashboard = () => {
   const [products, setProducts] = useState<Product[]>(mockProducts);
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddProduct, setShowAddProduct] = useState(false);
-  const [newProduct, setNewProduct] = useState({ name: "", price: 0, color: "", stock: 0 });
+  const [newProduct, setNewProduct] = useState({ name: "", price: 15, color: "", stock: 0, image: "" });
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = reader.result as string;
+        setImagePreview(result);
+        setNewProduct({ ...newProduct, image: result });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   useEffect(() => {
     const isAdmin = localStorage.getItem("isAdmin");
@@ -83,10 +100,15 @@ const AdminDashboard = () => {
     }
     const product: Product = {
       id: Date.now().toString(),
-      ...newProduct
+      name: newProduct.name,
+      price: newProduct.price,
+      color: newProduct.color,
+      stock: newProduct.stock,
+      image: newProduct.image || undefined
     };
     setProducts([...products, product]);
-    setNewProduct({ name: "", price: 0, color: "", stock: 0 });
+    setNewProduct({ name: "", price: 15, color: "", stock: 0, image: "" });
+    setImagePreview(null);
     setShowAddProduct(false);
     toast.success("Product added successfully");
   };
@@ -231,30 +253,55 @@ const AdminDashboard = () => {
               {showAddProduct && (
                 <div className="bg-card rounded-2xl p-6 shadow-card mb-6">
                   <h3 className="font-display text-xl text-foreground mb-4">ADD NEW PRODUCT</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    {/* Image Upload */}
+                    <div className="md:col-span-2 lg:col-span-1">
+                      <Label>Product Image</Label>
+                      <label className="block mt-2 cursor-pointer">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                        <div className="border-2 border-dashed border-border rounded-xl p-4 h-32 flex flex-col items-center justify-center hover:border-primary transition-colors">
+                          {imagePreview ? (
+                            <img src={imagePreview} alt="Preview" className="max-h-full max-w-full object-contain rounded" />
+                          ) : (
+                            <>
+                              <Upload className="text-muted-foreground mb-2" size={24} />
+                              <span className="text-muted-foreground text-xs text-center">Upload Image</span>
+                            </>
+                          )}
+                        </div>
+                      </label>
+                    </div>
                     <div>
                       <Label>Product Name</Label>
                       <Input
-                        placeholder="e.g. Classic Blue"
+                        placeholder="e.g. Ocean Wave"
                         value={newProduct.name}
                         onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                        className="mt-2"
                       />
                     </div>
                     <div>
                       <Label>Color</Label>
                       <Input
-                        placeholder="e.g. Royal Blue"
+                        placeholder="e.g. Navy"
                         value={newProduct.color}
                         onChange={(e) => setNewProduct({ ...newProduct, color: e.target.value })}
+                        className="mt-2"
                       />
                     </div>
                     <div>
                       <Label>Price (JOD)</Label>
                       <Input
                         type="number"
-                        placeholder="45"
+                        placeholder="15"
                         value={newProduct.price || ""}
                         onChange={(e) => setNewProduct({ ...newProduct, price: Number(e.target.value) })}
+                        className="mt-2"
                       />
                     </div>
                     <div>
@@ -264,12 +311,13 @@ const AdminDashboard = () => {
                         placeholder="20"
                         value={newProduct.stock || ""}
                         onChange={(e) => setNewProduct({ ...newProduct, stock: Number(e.target.value) })}
+                        className="mt-2"
                       />
                     </div>
                   </div>
                   <div className="flex gap-2 mt-4">
                     <Button variant="hero" onClick={addProduct}>Add Product</Button>
-                    <Button variant="outline" onClick={() => setShowAddProduct(false)}>Cancel</Button>
+                    <Button variant="outline" onClick={() => { setShowAddProduct(false); setImagePreview(null); }}>Cancel</Button>
                   </div>
                 </div>
               )}
@@ -277,8 +325,12 @@ const AdminDashboard = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {products.map((product) => (
                   <div key={product.id} className="bg-card rounded-2xl p-6 shadow-card">
-                    <div className="w-full h-32 rounded-xl bg-background/50 flex items-center justify-center mb-4">
-                      <Package size={48} className="text-muted-foreground" />
+                    <div className="w-full h-32 rounded-xl bg-background/50 flex items-center justify-center mb-4 overflow-hidden">
+                      {product.image ? (
+                        <img src={product.image} alt={product.name} className="w-full h-full object-cover rounded-xl" />
+                      ) : (
+                        <ImageIcon size={48} className="text-muted-foreground" />
+                      )}
                     </div>
                     <h3 className="font-display text-lg text-foreground">{product.name}</h3>
                     <p className="text-muted-foreground text-sm">{product.color}</p>

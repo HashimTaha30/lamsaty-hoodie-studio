@@ -237,7 +237,7 @@ const Custom = () => {
                 </Button>
                 <Button variant="hero" onClick={handleOrderSubmit} className="flex-1">
                   <ShoppingCart size={16} />
-                  Order Custom Hoodie - 55 JOD
+                  Order Custom Hoodie - 25 JOD
                 </Button>
               </div>
             </div>
